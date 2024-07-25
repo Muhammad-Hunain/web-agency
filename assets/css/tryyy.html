@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+.slider {
+  overflow: hidden; /* Hide overflowing content */
+  position: relative; /* Ensure relative positioning for absolute positioning of slides */
+  width: 100%;
+  height: 400px; /* Set height as needed */
+  background-color: black;
+  color: white;
+}
+
+.slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  opacity: 0; /* Start slides hidden */
+  transition: opacity 0.5s ease; /* Smooth opacity transition */
+}
+
+.slide.active {
+  opacity: 1; /* Show active slide */
+}
+
+    </style>
+</head>
+<body>
+    <div class="slider">
+        <div class="slide">
+          <img src="../images/logo.png" alt="Slide 1">
+          <div class="slide-content">
+            <h2>Slide 1 Title</h2>
+            <p>Slide 1 Description</p>
+          </div>
+        </div>
+        <div class="slide">
+          <img src="../images/logo.png" alt="Slide 2">
+          <div class="slide-content">
+            <h2>Slide 2 Title</h2>
+            <p>Slide 2 Description</p>
+          </div>
+        </div>
+        <!-- Add more slides as needed -->
+      </div>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.1/gsap.min.js"></script>
+<script>
+
+
+    // GSAP TimelineMax for sequencing animations
+const tl = gsap.timeline({ defaults: { ease: "power3.inOut" } });
+
+// Select all slides and initially hide them
+const slides = document.querySelectorAll(".slide");
+tl.set(slides, { opacity: 0 });
+
+// Show the first slide initially
+tl.set(slides[0], { opacity: 1 });
+
+// Function to animate slides
+function animateSlides(index) {
+  tl.to(slides, { opacity: 0 }); // Fade out all slides
+  tl.to(slides[index], { opacity: 1 }); // Fade in the targeted slide
+}
+
+// Simulate automatic slide change every 3 seconds
+let currentIndex = 0;
+const slideInterval = setInterval(function() {
+  currentIndex = (currentIndex + 1) % slides.length;
+  animateSlides(currentIndex);
+}, 3000);
+
+// Pause the interval on mouseenter and resume on mouseleave
+const slider = document.querySelector('.slider');
+slider.addEventListener('mouseenter', () => clearInterval(slideInterval));
+slider.addEventListener('mouseleave', () => {
+  slideInterval = setInterval(function() {
+    currentIndex = (currentIndex + 1) % slides.length;
+    animateSlides(currentIndex);
+  }, 3000);
+});
+
+</script>
+</body>
+</html>
